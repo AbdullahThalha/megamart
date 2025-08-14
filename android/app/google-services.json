@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "652287221531",
+    "project_id": "megamart-3dfd1",
+    "storage_bucket": "megamart-3dfd1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:652287221531:android:5a1581f9682749c9083dbe",
+        "android_client_info": {
+          "package_name": "com.example.megamart"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYto_LpQn-nN-w3TQtz9tMlv0sSyrXeus"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
