@@ -13,6 +13,27 @@ class AuthService {
     return credential.user;
   }
 
+  Future<User?> signUp(String email, String password, String name) async {
+    try {
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      User? user = result.user;
+
+      if (user != null) {
+        await user.updateDisplayName(name); // Set user name
+        await user.reload(); // Refresh user data
+        return _auth.currentUser; // Return the newly signed up user
+      } else {
+        return null;
+      }
+    } catch (e) {
+      throw e; // Throw error to show on UI
+    }
+  }
+
   Future<void> signOut() async {
     await _auth.signOut();
   }
