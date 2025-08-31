@@ -26,7 +26,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       try {
         final user = await _authService.signUp(_email, _password, _name);
         if (user != null) {
-          // Auto login successful, navigate to Home
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (_) => HomeScreen()),
@@ -45,7 +44,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Sign Up")),
+      appBar: AppBar(title: Text("Sign Up")), // Theme automatically apply
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -77,7 +76,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
               SizedBox(height: 20),
               // Sign Up Button / Loader
               _isLoading
-                  ? CircularProgressIndicator()
+                  ? CircularProgressIndicator(
+                      color: Theme.of(context).primaryColor,
+                    )
                   : ElevatedButton(onPressed: _signUp, child: Text("Sign Up")),
               SizedBox(height: 20),
               // Link to Sign In

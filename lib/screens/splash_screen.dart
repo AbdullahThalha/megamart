@@ -19,20 +19,18 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _navigate() async {
-    // Wait 2-3 seconds for splash animation
+    // Wait 2 seconds for splash animation
     await Future.delayed(const Duration(seconds: 2));
 
     // Check if user is logged in
     final user = _authService.currentUser;
 
     if (user != null) {
-      // Navigate to Home if logged in
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => HomeScreen()),
       );
     } else {
-      // Navigate to Sign-in if not logged in
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => SignInScreen()),
@@ -43,19 +41,25 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(
+        context,
+      ).scaffoldBackgroundColor, // ✅ Theme থেকে background নেবে
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset("assets/images/logo.png", width: 120, height: 120),
             const SizedBox(height: 20),
-            const Text(
+            Text(
               "MegaMart – Shop Smarter",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium, // ✅ Theme এর text style
             ),
             const SizedBox(height: 30),
-            const CircularProgressIndicator(color: Colors.orange),
+            CircularProgressIndicator(
+              color: Theme.of(context).primaryColor, // ✅ Theme এর primaryColor
+            ),
           ],
         ),
       ),

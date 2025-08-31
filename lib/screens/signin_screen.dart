@@ -46,7 +46,9 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Sign In")),
+      appBar: AppBar(
+        title: const Text("Sign In"),
+      ), // Theme থেকে color/text style apply হবে
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -60,7 +62,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   controller: _emailController,
                   decoration: const InputDecoration(
                     labelText: "Email",
-                    border: OutlineInputBorder(),
+                    // border manually define করার দরকার নেই
                   ),
                   validator: (value) =>
                       value!.isEmpty ? "Enter your email" : null,
@@ -71,10 +73,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 TextFormField(
                   controller: _passwordController,
                   obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: "Password",
-                    border: OutlineInputBorder(),
-                  ),
+                  decoration: const InputDecoration(labelText: "Password"),
                   validator: (value) =>
                       value!.isEmpty ? "Enter your password" : null,
                 ),
@@ -82,16 +81,11 @@ class _SignInScreenState extends State<SignInScreen> {
 
                 // Sign In Button
                 _isLoading
-                    ? const CircularProgressIndicator(color: Colors.orange)
+                    ? CircularProgressIndicator(
+                        color: Theme.of(context).primaryColor, // theme color
+                      )
                     : ElevatedButton(
                         onPressed: _signIn,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 12,
-                            horizontal: 50,
-                          ),
-                        ),
                         child: const Text(
                           "Sign In",
                           style: TextStyle(fontSize: 16),

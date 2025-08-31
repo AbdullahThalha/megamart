@@ -10,10 +10,13 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("MegaMart Home"),
+        title: Text("MegaMart Home"), // Theme automatically style apply করবে
         actions: [
           IconButton(
-            icon: Icon(Icons.logout),
+            icon: Icon(
+              Icons.logout,
+              color: Theme.of(context).iconTheme.color, // theme color
+            ),
             onPressed: () async {
               await _authService.signOut();
               Navigator.pushReplacement(
@@ -24,7 +27,14 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(child: Text("Welcome to MegaMart!")),
+      body: Center(
+        child: Text(
+          "Welcome to MegaMart!",
+          style: Theme.of(
+            context,
+          ).textTheme.headlineMedium, // centralized text style
+        ),
+      ),
     );
   }
 }
