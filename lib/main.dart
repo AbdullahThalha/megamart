@@ -1,17 +1,24 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'firebase_options.dart'; // flutterfire configure এ জেনারেট হওয়া ফাইল
+import 'firebase_options.dart'; // FlutterFire generated file
+import 'providers/cart_provider.dart'; // CartProvider for state management
 import 'screens/splash_screen.dart';
-import 'theme/app_theme.dart'; // 👈 তোমার custom theme import করো
+import 'theme/app_theme.dart'; // Your custom theme
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ✅ Initialize Firebase
+  // Initialize Firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => CartProvider())],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -23,12 +30,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'MegaMart',
 
-      // 👇 এখানে custom theme use হচ্ছে
+      // Apply custom theme
       theme: AppTheme.lightTheme,
 
-      // চাইলে পরে darkTheme ও add করতে পারো
-      // darkTheme: AppTheme.darkTheme,
-      // themeMode: ThemeMode.system, // device অনুযায়ী light/dark switch হবে
+      // Splash screen as the first screen
       home: SplashScreen(),
     );
   }

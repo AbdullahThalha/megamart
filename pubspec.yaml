@@ -29,9 +29,12 @@ environment:
 # versions available, run `flutter pub outdated`.
 
 
+
+
 dependencies:
   flutter:
     sdk: flutter
+  provider: ^6.1.5+1
 
   # Latest Firebase versions (stable, Aug 2025)
   firebase_core: ^3.6.0
