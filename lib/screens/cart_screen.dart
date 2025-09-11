@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/cart_provider.dart';
+import 'checkout_screen.dart';
 
 class CartScreen extends StatelessWidget {
   @override
@@ -53,11 +54,12 @@ class CartScreen extends StatelessWidget {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-                // TODO: Navigate to Checkout Screen
-                ScaffoldMessenger.of(
+                Navigator.push(
                   context,
-                ).showSnackBar(SnackBar(content: Text("Proceed to Checkout")));
+                  MaterialPageRoute(builder: (_) => const CheckoutScreen()),
+                );
               },
+
               child: Text("Checkout"),
             ),
           ),

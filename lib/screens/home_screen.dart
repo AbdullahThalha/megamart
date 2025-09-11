@@ -1,10 +1,14 @@
+// lib/screens/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/cart_provider.dart';
+import '../providers/wishlist_provider.dart';
 import 'cart_screen.dart';
 import 'categories_page.dart';
+import 'orders_page.dart';
 import 'product_details_screen.dart';
+import 'profile_page.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -14,13 +18,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  // Screens for bottom nav
   final List<Widget> _pages = [
-    HomePage(), // Main Home content
-    CategoriesPage(), // Categories
-    CartScreen(), // Cart
-    OrdersPage(), // Orders
-    ProfilePage(), // Profile
+    HomePage(),
+    CategoriesPage(),
+    CartScreen(),
+    OrdersPage(),
+    ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -103,12 +106,43 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("MegaMart Home"),
+        title: const Text("MegaMart Home"),
         actions: [
+          // Wishlist icon
+          Consumer<WishlistProvider>(
+            builder: (ctx, wishlist, _) => Stack(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.favorite),
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/wishlist");
+                  },
+                ),
+                if (wishlist.itemCount > 0)
+                  Positioned(
+                    right: 5,
+                    top: 5,
+                    child: CircleAvatar(
+                      radius: 10,
+                      backgroundColor: Colors.red,
+                      child: Text(
+                        wishlist.itemCount.toString(),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+
+          // Cart icon
           Stack(
             children: [
               IconButton(
-                icon: Icon(Icons.shopping_cart),
+                icon: const Icon(Icons.shopping_cart),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -125,7 +159,7 @@ class HomePage extends StatelessWidget {
                     backgroundColor: Colors.red,
                     child: Text(
                       cart.itemCount.toString(),
-                      style: TextStyle(fontSize: 12, color: Colors.white),
+                      style: const TextStyle(fontSize: 12, color: Colors.white),
                     ),
                   ),
                 ),
@@ -139,13 +173,13 @@ class HomePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ---------------- Search Bar ----------------
+              // Search bar
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
                   decoration: InputDecoration(
                     hintText: "Search products...",
-                    prefixIcon: Icon(Icons.search),
+                    prefixIcon: const Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -153,89 +187,61 @@ class HomePage extends StatelessWidget {
                 ),
               ),
 
-              // --------------- Category Row ----------------
-              Container(
-                height: 120, // ⬅️ height বাড়ানো হলো
+              // Categories row
+              SizedBox(
+                height: 120,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: categories.length,
                   itemBuilder: (ctx, i) {
-                    return GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        width: 100,
-                        margin: EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 10,
-                        ),
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.orange.shade100,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              categories[i]["icon"],
-                              size: 36, // ⬅️ একটু বড়
-                              color: Colors.orange,
-                            ),
-                            SizedBox(height: 6),
-                            Flexible(
-                              // ⬅️ Text overflow handle করার জন্য
-                              child: Text(
-                                categories[i]["title"],
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                textAlign: TextAlign.center,
-                                maxLines: 2, // ⬅️ long text হলে ২ লাইনে আসবে
-                                overflow: TextOverflow.ellipsis,
+                    return Container(
+                      width: 100,
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 10,
+                      ),
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.orange.shade100,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            categories[i]["icon"],
+                            size: 36,
+                            color: Colors.orange,
+                          ),
+                          const SizedBox(height: 6),
+                          Flexible(
+                            child: Text(
+                              categories[i]["title"],
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
                               ),
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     );
                   },
                 ),
               ),
 
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
 
-              // --------------- Featured Banner / Slider ----------------
-              Container(
-                height: 120,
-                margin: EdgeInsets.symmetric(horizontal: 8),
-                child: PageView(
-                  children: [
-                    Container(
-                      color: Colors.orange.shade200,
-                      child: Center(child: Text("New Arrival")),
-                    ),
-                    Container(
-                      color: Colors.orange.shade300,
-                      child: Center(child: Text("Discount Offer")),
-                    ),
-                    Container(
-                      color: Colors.orange.shade400,
-                      child: Center(child: Text("Special Deals")),
-                    ),
-                  ],
-                ),
-              ),
-
-              SizedBox(height: 10),
-
-              // --------------- Product Grid ----------------
+              // Products grid
               GridView.builder(
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 itemCount: dummyProducts.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 3 / 4,
                   crossAxisSpacing: 10,
@@ -261,14 +267,39 @@ class HomePage extends StatelessWidget {
                       elevation: 3,
                       child: Column(
                         children: [
-                          Image.network(product["imageUrl"], height: 80),
-                          SizedBox(height: 5),
+                          Stack(
+                            children: [
+                              Image.network(product["imageUrl"], height: 80),
+                              Positioned(
+                                right: 0,
+                                child: Consumer<WishlistProvider>(
+                                  builder: (ctx, wishlist, _) => IconButton(
+                                    icon: Icon(
+                                      wishlist.isInWishlist(product["id"])
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                      color: Colors.red,
+                                    ),
+                                    onPressed: () {
+                                      wishlist.toggleItem(
+                                        product["id"],
+                                        product["title"],
+                                        product["price"],
+                                        product["imageUrl"],
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 5),
                           Text(
                             product["title"],
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          Text("\$${product["price"]}"),
-                          Expanded(child: SizedBox()), // ✅ Spacer → Expanded
+                          Text("৳${product["price"]}"),
+                          const Spacer(),
                           ElevatedButton(
                             onPressed: () {
                               Provider.of<CartProvider>(
@@ -280,9 +311,9 @@ class HomePage extends StatelessWidget {
                                 product["price"],
                               );
                             },
-                            child: Text("Add to Cart"),
+                            child: const Text("Add to Cart"),
                           ),
-                          SizedBox(height: 5),
+                          const SizedBox(height: 5),
                         ],
                       ),
                     ),
@@ -295,18 +326,4 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-}
-
-// ---------------- Placeholder screens for BottomNav ----------------
-
-class OrdersPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) =>
-      Scaffold(body: Center(child: Text("Orders Page")));
-}
-
-class ProfilePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) =>
-      Scaffold(body: Center(child: Text("Profile Page")));
 }

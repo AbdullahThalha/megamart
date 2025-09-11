@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:megamart/providers/orders_provider.dart';
+import 'package:megamart/providers/wishlist_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'firebase_options.dart'; // FlutterFire generated file
@@ -15,7 +17,11 @@ void main() async {
 
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => CartProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => WishlistProvider()),
+        ChangeNotifierProvider(create: (_) => OrdersProvider()), // ✅ NEW
+      ],
       child: const MyApp(),
     ),
   );
