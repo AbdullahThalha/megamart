@@ -5,6 +5,7 @@ import '../providers/cart_provider.dart';
 import '../providers/wishlist_provider.dart';
 import 'cart_screen.dart';
 import 'categories_page.dart';
+import 'category_products_page.dart'; // ✅ category navigation এর জন্য import
 import 'orders_page.dart';
 import 'product_details_screen.dart';
 import 'profile_page.dart';
@@ -190,46 +191,58 @@ class HomePage extends StatelessWidget {
                 ),
               ),
 
-              // Categories row
+              // ✅ Categories row (now functional)
               SizedBox(
                 height: 120,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: categories.length,
                   itemBuilder: (ctx, i) {
-                    return Container(
-                      width: 100,
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 10,
-                      ),
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.orange.shade100,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            categories[i]["icon"],
-                            size: 36,
-                            color: Colors.orange,
-                          ),
-                          const SizedBox(height: 6),
-                          Flexible(
-                            child: Text(
-                              categories[i]["title"],
-                              style: const TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => CategoryProductsPage(
+                              categoryName: categories[i]["title"],
                             ),
                           ),
-                        ],
+                        );
+                      },
+                      child: Container(
+                        width: 100,
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 10,
+                        ),
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.orange.shade100,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              categories[i]["icon"],
+                              size: 36,
+                              color: Colors.orange,
+                            ),
+                            const SizedBox(height: 6),
+                            Flexible(
+                              child: Text(
+                                categories[i]["title"],
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                textAlign: TextAlign.center,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
