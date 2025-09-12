@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:megamart/screens/wishlist_page.dart';
 
-import 'orders_page.dart'; // ✅ OrdersPage import করতে ভুলবে না
+import 'help_support_page.dart';
+import 'orders_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -13,7 +14,6 @@ class ProfilePage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // ---------- Profile Header ----------
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 30),
@@ -29,7 +29,7 @@ class ProfilePage extends StatelessWidget {
                   CircleAvatar(
                     radius: 40,
                     backgroundImage: NetworkImage(
-                      "https://via.placeholder.com/150", // dummy profile pic
+                      "https://via.placeholder.com/150",
                     ),
                   ),
                   SizedBox(height: 10),
@@ -48,15 +48,11 @@ class ProfilePage extends StatelessWidget {
                 ],
               ),
             ),
-
             const SizedBox(height: 20),
-
-            // ---------- Profile Options ----------
             ListTile(
               leading: const Icon(Icons.shopping_bag, color: Colors.orange),
               title: const Text("My Orders"),
               onTap: () {
-                // ✅ Direct navigation to OrdersPage
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const OrdersPage()),
@@ -64,7 +60,6 @@ class ProfilePage extends StatelessWidget {
               },
             ),
             const Divider(),
-
             ListTile(
               leading: const Icon(Icons.favorite, color: Colors.orange),
               title: const Text("Wishlist"),
@@ -75,32 +70,28 @@ class ProfilePage extends StatelessWidget {
                 );
               },
             ),
-
             const Divider(),
-
             ListTile(
               leading: const Icon(Icons.settings, color: Colors.orange),
               title: const Text("Settings"),
-              onTap: () {
-                // TODO: Settings screen
-              },
+              onTap: () {},
             ),
             const Divider(),
-
             ListTile(
               leading: const Icon(Icons.help, color: Colors.orange),
               title: const Text("Help & Support"),
               onTap: () {
-                // TODO: Help screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const HelpSupportPage()),
+                );
               },
             ),
             const Divider(),
-
             ListTile(
               leading: const Icon(Icons.logout, color: Colors.red),
               title: const Text("Logout"),
               onTap: () {
-                // TODO: Firebase Auth signOut বা অন্য logout logic
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text("Logged out successfully")),
                 );
