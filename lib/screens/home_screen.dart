@@ -1,4 +1,3 @@
-// lib/screens/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,6 +8,7 @@ import 'categories_page.dart';
 import 'orders_page.dart';
 import 'product_details_screen.dart';
 import 'profile_page.dart';
+import 'wishlist_page.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -115,7 +115,10 @@ class HomePage extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.favorite),
                   onPressed: () {
-                    Navigator.pushNamed(context, "/wishlist");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => WishlistPage()),
+                    );
                   },
                 ),
                 if (wishlist.itemCount > 0)
