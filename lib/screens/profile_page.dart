@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:megamart/screens/settings_screen.dart';
 import 'package:megamart/screens/wishlist_page.dart';
 
 import 'help_support_page.dart';
@@ -74,8 +75,14 @@ class ProfilePage extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.settings, color: Colors.orange),
               title: const Text("Settings"),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                );
+              },
             ),
+
             const Divider(),
             ListTile(
               leading: const Icon(Icons.help, color: Colors.orange),

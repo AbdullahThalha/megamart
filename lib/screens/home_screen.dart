@@ -5,7 +5,6 @@ import '../providers/cart_provider.dart';
 import '../providers/wishlist_provider.dart';
 import 'cart_screen.dart';
 import 'categories_page.dart';
-import 'category_products_page.dart'; // ✅ category navigation এর জন্য import
 import 'orders_page.dart';
 import 'product_details_screen.dart';
 import 'profile_page.dart';
@@ -63,7 +62,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
 // ------------------ Home Page ------------------
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final List<Map<String, dynamic>> dummyProducts = [
     {
       "id": "p1",
@@ -101,9 +105,20 @@ class HomePage extends StatelessWidget {
     {"icon": Icons.medical_services, "title": "Medical Instruments"},
   ];
 
+  String searchQuery = "";
+
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<CartProvider>(context);
+
+    // 🔎 Filter products based on search
+    final filteredProducts = dummyProducts
+        .where(
+          (product) => product["title"].toLowerCase().contains(
+            searchQuery.toLowerCase(),
+          ),
+        )
+        .toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -181,6 +196,11 @@ class HomePage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      searchQuery = value;
+                    });
+                  },
                   decoration: InputDecoration(
                     hintText: "Search products...",
                     prefixIcon: const Icon(Icons.search),
@@ -191,58 +211,46 @@ class HomePage extends StatelessWidget {
                 ),
               ),
 
-              // ✅ Categories row (now functional)
+              // Categories row
               SizedBox(
                 height: 120,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: categories.length,
                   itemBuilder: (ctx, i) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => CategoryProductsPage(
-                              categoryName: categories[i]["title"],
+                    return Container(
+                      width: 100,
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 10,
+                      ),
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.orange.shade100,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            categories[i]["icon"],
+                            size: 36,
+                            color: Colors.orange,
+                          ),
+                          const SizedBox(height: 6),
+                          Flexible(
+                            child: Text(
+                              categories[i]["title"],
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                        );
-                      },
-                      child: Container(
-                        width: 100,
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 10,
-                        ),
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.orange.shade100,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              categories[i]["icon"],
-                              size: 36,
-                              color: Colors.orange,
-                            ),
-                            const SizedBox(height: 6),
-                            Flexible(
-                              child: Text(
-                                categories[i]["title"],
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                textAlign: TextAlign.center,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
+                        ],
                       ),
                     );
                   },
@@ -256,7 +264,7 @@ class HomePage extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 padding: const EdgeInsets.all(10),
-                itemCount: dummyProducts.length,
+                itemCount: filteredProducts.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 3 / 4,
@@ -264,7 +272,7 @@ class HomePage extends StatelessWidget {
                   mainAxisSpacing: 10,
                 ),
                 itemBuilder: (ctx, i) {
-                  final product = dummyProducts[i];
+                  final product = filteredProducts[i];
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
